@@ -97,7 +97,7 @@ public class GoombaController : MonoBehaviour
         // ajustes de animacion y se baja un poco para dar la sensacion de que cae al suelo y despues de medio segundo se elimina
         DisablePhysics();
         CosasBonitas();
-
+        GameManager.Instance.AddPoints(100);
         Destroy(gameObject, 0.5f);
 
     }

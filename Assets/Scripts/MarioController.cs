@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MarioController : MonoBehaviour
 {
@@ -16,7 +17,7 @@ public class MarioController : MonoBehaviour
 
     public float maxSpeed;
 
-
+    public int lives = 3;
     public Transform top_left;
     public Transform bottom_right;
     public LayerMask suelo;
@@ -37,6 +38,7 @@ public class MarioController : MonoBehaviour
     public AudioClip audioJjump;
     public AudioClip audioDie;
     
+
 
    
 
@@ -73,6 +75,20 @@ public class MarioController : MonoBehaviour
             isJumping = true;
             jumpTimeCounter = jumpTime;
         }
+        if (collision.CompareTag("Win"))
+        {
+            Win();
+        }
+    }
+
+    private void Win()
+    {
+        
+        audioSource.clip = audioDie;
+        audioSource.Play();
+        horizontal = null;
+        rb2D.velocity = new Vector2(2, rb2D.velocity.y);
+
     }
 
     public void Hit()
@@ -87,13 +103,14 @@ public class MarioController : MonoBehaviour
         }
     }
 
-    private bool isMarioBig()
+    public bool isMarioBig()
     {
         return false;
     }
 
     private void Die()
     {
+        
         audioSource.clip = audioDie;
         audioSource.Play();
         animator.SetBool("dead", true);
@@ -102,7 +119,21 @@ public class MarioController : MonoBehaviour
         horizontal = null;
         rb2D.velocity = Vector2.zero;
         rb2D.AddForce(Vector2.up * 3.5f, ForceMode2D.Impulse);
+        StartCoroutine(CheckLives());
+    }
 
+    private IEnumerator CheckLives()
+    {
+        
+        lives--;
+        if (lives == 0)
+        {
+            //Cambia d escena game over looooooooooooooooooooooooooooooooooooool
+            //SceneManager.LoadScene("GameOver");
+            SceneManager.LoadScene(0);
+        }
+        yield return new WaitForSeconds(3);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     void Update()

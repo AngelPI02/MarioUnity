@@ -8,6 +8,7 @@ TagManager:
   - Enemy
   - Cabeza
   - Mario
+  - Win
   layers:
   - Default
   - TransparentFX
