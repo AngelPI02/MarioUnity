@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UIElements;
 
 public class MarioController : MonoBehaviour
 {
@@ -23,8 +24,8 @@ public class MarioController : MonoBehaviour
     public float maxSpeed;
 
     public int lives = 3;
-    public Transform top_left;
-    public Transform bottom_right;
+    
+
     public LayerMask suelo;
 
     public float jumpTime;
@@ -52,6 +53,7 @@ public class MarioController : MonoBehaviour
         rb2D = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         collider = GetComponent<BoxCollider2D>();
+        
     }
     void Start()
     {
@@ -91,13 +93,15 @@ public class MarioController : MonoBehaviour
         {
             Win();
         }
-        
+        if (collision.CompareTag("Castle"))
+        {
+            Destroy(this);
+        }
+
     }
 
     public void Crece()
     {
-
-        bottom_right.position = new Vector3(bottom_right.position.x, bottom_right.position.y*2, 0);
 
         collider.size = new Vector2(0.12f, 0.32f);
         isMarioBig = true;
@@ -119,7 +123,6 @@ public class MarioController : MonoBehaviour
     private void Descrece()
     {
         collider.size = new Vector2(0.12f, 0.16f);
-        bottom_right.position = new Vector3(bottom_right.position.x, bottom_right.position.y / 2, 0);
         isMarioBig = false;
         animator.SetBool("isBig", false);
     }
@@ -201,7 +204,9 @@ public class MarioController : MonoBehaviour
 
     private bool isGrounded()
     {
-        return Physics2D.OverlapArea(top_left.position, bottom_right.position, suelo);
+        Bounds boxBounds = collider.bounds;
+        Vector2 bottomRight = new Vector2(boxBounds.center.x + boxBounds.extents.x, boxBounds.center.y - boxBounds.extents.y);
+        return Physics2D.OverlapArea(boxBounds.center, bottomRight, suelo);
     }
     public void Jump()
     {

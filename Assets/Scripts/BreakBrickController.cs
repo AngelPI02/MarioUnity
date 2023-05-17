@@ -13,7 +13,7 @@ public class BreakBrickController : MonoBehaviour
 
     private void Start()
     {
-        marioController = GetComponent<MarioController>();
+        marioController = GameObject.Find("Mario").GetComponent<MarioController>();
     }
 
     private void OnCollisionEnter2D(Collision2D collision)

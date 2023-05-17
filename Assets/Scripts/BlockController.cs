@@ -8,6 +8,7 @@ public class BlockController : MonoBehaviour
 {
 
     public Tilemap blocks;
+    public TileBase roto;
 
     
     private void Start()
@@ -20,6 +21,7 @@ public class BlockController : MonoBehaviour
 
         Vector3 contact = collision.contacts[0].point;
         Vector3Int tile = blocks.WorldToCell(contact) ;
+
         if (collision.gameObject.CompareTag("Mario")) {
            
             Debug.Log(tile.x + " caca " + tile.y +1);
@@ -27,7 +29,8 @@ public class BlockController : MonoBehaviour
             Debug.Log(tileDefinitiva);
 
 
-            blocks.SetTile(tileDefinitiva, null);
+            if(blocks.GetTile(tileDefinitiva) != null) 
+                blocks.SetTile(tileDefinitiva, roto);
             
         }
     }
